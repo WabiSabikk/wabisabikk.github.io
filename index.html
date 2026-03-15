@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olexander K. - Full-Stack Developer</title>
+<meta name="description" content="Full-Stack Developer - .NET, Python, TypeScript. SaaS, platforms, bots. Portfolio with source code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #00ff41;
+  --green-dim: #00aa2a;
+  --green-glow: rgba(0, 255, 65, 0.3);
+  --green-glow-strong: rgba(0, 255, 65, 0.5);
+  --bg: #000000;
+  --gray-dark: #333;
+  --gray-mid: #555;
+  --gray-light: #888;
+  --font: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--green);
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.015) 2px,
+    rgba(0, 255, 65, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Scroll progress bar */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-glow-strong);
+  z-index: 10001;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.92);
+  border-bottom: 1px solid var(--gray-dark);
+  backdrop-filter: blur(8px);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  padding: 0 24px;
+}
+.nav.visible { transform: translateY(0); }
+
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  font-size: 13px;
+}
+
+.nav-prompt {
+  color: var(--gray-light);
+}
+.nav-prompt span { color: var(--green); }
+
+.nav-links { display: flex; gap: 4px; }
+
+.nav-links a {
+  color: var(--gray-light);
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.nav-links a:hover {
+  color: var(--green);
+  border-color: var(--green);
+  text-shadow: 0 0 10px var(--green-glow);
+}
+
+.lang-switch {
+  position: fixed;
+  top: 12px;
+  right: 24px;
+  z-index: 10002;
+  font-size: 12px;
+  display: flex;
+  border: 1px solid var(--gray-dark);
+}
+.lang-switch button {
+  background: transparent;
+  border: none;
+  color: var(--gray-mid);
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lang-switch button.active {
+  background: var(--green);
+  color: #000;
+}
+.lang-switch button:hover:not(.active) {
+  color: var(--green);
+}
+
+/* Main layout */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--gray-dark);
+}
+section:last-of-type { border-bottom: none; }
+
+/* Section label — command prompt */
+.cmd-label {
+  font-size: 12px;
+  color: var(--gray-mid);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.cmd-label .prompt { color: var(--green-dim); }
+
+/* Section heading — output */
+.section-heading {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green-glow);
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  color: var(--gray-light);
+  font-size: 13px;
+  max-width: 680px;
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid var(--gray-dark);
+  position: relative;
+}
+
+.hero-prompt {
+  font-size: 13px;
+  color: var(--gray-mid);
+  margin-bottom: 4px;
+}
+.hero-prompt .p { color: var(--green-dim); }
+
+.hero-whoami {
+  font-size: 14px;
+  color: var(--gray-light);
+  margin-bottom: 40px;
+}
+.hero-whoami .gt { color: var(--green-dim); margin-right: 6px; }
+.hero-whoami .name { color: var(--green); }
+
+.hero-badge {
+  display: inline-block;
+  font-size: 11px;
+  color: #000;
+  background: var(--green);
+  padding: 2px 10px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.hero-heading {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--green);
+  text-shadow: 0 0 20px var(--green-glow);
+  margin-bottom: 20px;
+  min-height: 1.4em;
+  line-height: 1.3;
+}
+
+.cursor-blink {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+  color: var(--green);
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.hero-text {
+  color: var(--gray-light);
+  font-size: 14px;
+  max-width: 640px;
+  margin-bottom: 32px;
+  line-height: 1.8;
+}
+
+.hero-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.hero-links a {
+  color: var(--green);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 0;
+  transition: all 0.2s;
+}
+.hero-links a:hover {
+  text-shadow: 0 0 12px var(--green-glow-strong);
+}
+.hero-links .cmd { color: var(--green-dim); margin-right: 6px; }
+.hero-links .arrow { color: var(--gray-mid); margin-left: 8px; }
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.6s;
+  animation: hint-fade-in 1s ease 1.5s both;
+  cursor: pointer;
+}
+.scroll-hint-text {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--green);
+  text-transform: uppercase;
+  text-shadow: 0 0 12px var(--green-glow);
+}
+.scroll-hint-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, var(--green));
+  position: relative;
+}
+.scroll-hint-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 5px;
+  height: 12px;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green-glow-strong), 0 0 30px var(--green-glow);
+  border-radius: 2px;
+  animation: scroll-drop 2s ease-in-out infinite;
+}
+@keyframes scroll-drop {
+  0% { top: 0; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+@keyframes hint-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.scroll-hint.hidden { opacity: 0; pointer-events: none; }
+
+/* ========== TECH STACK ========== */
+.stack-table {
+  width: 100%;
+  border: 1px solid var(--gray-dark);
+  font-size: 13px;
+  overflow-x: auto;
+}
+
+.stack-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gray-dark);
+  color: var(--gray-light);
+  font-size: 12px;
+}
+
+.stack-divider {
+  padding: 0 16px;
+  color: var(--gray-dark);
+  font-size: 12px;
+  line-height: 1.2;
+  border-bottom: 1px solid var(--gray-dark);
+  user-select: none;
+}
+
+.stack-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 16px;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.5);
+  transition: background 0.15s;
+}
+.stack-row:last-child { border-bottom: none; }
+.stack-row:hover { background: rgba(0, 255, 65, 0.03); }
+
+.stack-name { color: var(--green); }
+.stack-status { color: var(--gray-mid); }
+.stack-row.primary .stack-name { font-weight: 600; text-shadow: 0 0 8px var(--green-glow); }
+.stack-row.primary .stack-status { color: var(--green); }
+
+/* ========== PROJECTS ========== */
+.project-card {
+  border: 1px solid var(--gray-dark);
+  margin-bottom: 40px;
+  transition: border-color 0.3s;
+}
+.project-card:hover { border-color: var(--green-dim); }
+
+.project-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #111;
+  border-bottom: 1px solid var(--gray-dark);
+  font-size: 12px;
+}
+.project-dots { display: flex; gap: 6px; }
+.project-dots span {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.project-dots span:nth-child(1) { background: #ff5f56; }
+.project-dots span:nth-child(2) { background: #ffbd2e; }
+.project-dots span:nth-child(3) { background: #27c93f; }
+.project-title { color: var(--gray-light); margin-left: 8px; }
+
+.project-body { padding: 24px; }
+
+.project-cmd {
+  font-size: 12px;
+  color: var(--gray-mid);
+  margin-bottom: 12px;
+}
+.project-cmd .prompt { color: var(--green-dim); }
+
+.project-tagline {
+  font-size: 11px;
+  color: #000;
+  background: var(--green-dim);
+  display: inline-block;
+  padding: 2px 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.project-desc {
+  color: var(--gray-light);
+  font-size: 13px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.project-tags span {
+  font-size: 11px;
+  padding: 3px 10px;
+  border: 1px solid var(--gray-dark);
+  color: var(--green-dim);
+  transition: all 0.2s;
+}
+.project-tags span:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.project-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--green);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.project-link:hover { text-shadow: 0 0 12px var(--green-glow-strong); }
+.project-link .cmd { color: var(--green-dim); margin-right: 6px; }
+
+.project-link-private {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--gray-mid);
+  margin-top: 12px;
+}
+.project-link-private .cmd { color: var(--gray-dark); margin-right: 6px; }
+
+.project-screenshot {
+  margin-top: 24px;
+  border: 1px solid var(--gray-dark);
+}
+.project-screenshot .ss-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #111;
+  border-bottom: 1px solid var(--gray-dark);
+  font-size: 11px;
+}
+.project-screenshot .ss-dots { display: flex; gap: 5px; }
+.project-screenshot .ss-dots span {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.project-screenshot .ss-dots span:nth-child(1) { background: #ff5f56; }
+.project-screenshot .ss-dots span:nth-child(2) { background: #ffbd2e; }
+.project-screenshot .ss-dots span:nth-child(3) { background: #27c93f; }
+.project-screenshot .ss-title { color: var(--gray-mid); margin-left: 6px; }
+.project-screenshot img {
+  width: 100%;
+  display: block;
+  filter: brightness(0.95);
+  cursor: pointer;
+}
+
+.project-ascii {
+  margin-top: 24px;
+  border: 1px solid var(--gray-dark);
+  background: rgba(0, 255, 65, 0.02);
+  overflow-x: auto;
+}
+.project-ascii pre {
+  padding: 20px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--green);
+  text-shadow: 0 0 6px var(--green-glow);
+  white-space: pre;
+  margin: 0;
+}
+
+/* ========== ARCHITECTURE ========== */
+.arch-card {
+  border: 1px solid var(--gray-dark);
+  margin-bottom: 32px;
+}
+.arch-card .arch-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #111;
+  border-bottom: 1px solid var(--gray-dark);
+  font-size: 12px;
+}
+.arch-card .arch-dots { display: flex; gap: 6px; }
+.arch-card .arch-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.arch-card .arch-dots span:nth-child(1) { background: #ff5f56; }
+.arch-card .arch-dots span:nth-child(2) { background: #ffbd2e; }
+.arch-card .arch-dots span:nth-child(3) { background: #27c93f; }
+.arch-card .arch-title { color: var(--gray-light); margin-left: 8px; }
+
+.arch-card pre {
+  padding: 20px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--green);
+  text-shadow: 0 0 6px var(--green-glow);
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+  background: rgba(0, 255, 65, 0.02);
+}
+
+.arch-note {
+  font-size: 12px;
+  color: var(--gray-mid);
+  padding: 10px 20px;
+  border-top: 1px solid var(--gray-dark);
+}
+
+/* ========== GALLERY ========== */
+.gallery-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.gallery-frame {
+  border: 1px solid var(--gray-dark);
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.gallery-frame:hover { border-color: var(--green-dim); }
+
+.gallery-frame .gf-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #111;
+  border-bottom: 1px solid var(--gray-dark);
+  font-size: 11px;
+}
+.gallery-frame .gf-dots { display: flex; gap: 5px; }
+.gallery-frame .gf-dots span {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.gallery-frame .gf-dots span:nth-child(1) { background: #ff5f56; }
+.gallery-frame .gf-dots span:nth-child(2) { background: #ffbd2e; }
+.gallery-frame .gf-dots span:nth-child(3) { background: #27c93f; }
+.gallery-frame .gf-title { color: var(--gray-mid); margin-left: 6px; }
+
+.gallery-frame img {
+  width: 100%;
+  display: block;
+  filter: brightness(0.92);
+  transition: filter 0.3s;
+}
+.gallery-frame:hover img { filter: brightness(1); }
+
+/* ========== LIGHTBOX ========== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  background: rgba(0, 0, 0, 0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 40px;
+}
+.lightbox.active { display: flex; }
+
+.lightbox-inner {
+  max-width: 1100px;
+  width: 100%;
+  border: 1px solid var(--green);
+  box-shadow: 0 0 40px var(--green-glow);
+}
+.lightbox-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #111;
+  border-bottom: 1px solid var(--green);
+  font-size: 12px;
+}
+.lightbox-bar .lb-dots { display: flex; gap: 6px; }
+.lightbox-bar .lb-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.lightbox-bar .lb-dots span:nth-child(1) { background: #ff5f56; }
+.lightbox-bar .lb-dots span:nth-child(2) { background: #ffbd2e; }
+.lightbox-bar .lb-dots span:nth-child(3) { background: #27c93f; }
+.lightbox-bar .lb-title { color: var(--gray-light); margin-left: 8px; }
+.lightbox-bar .lb-close { margin-left: auto; color: var(--gray-mid); cursor: pointer; }
+.lightbox-bar .lb-close:hover { color: var(--green); }
+
+.lightbox-inner img {
+  width: 100%;
+  display: block;
+}
+
+/* ========== CONTACT ========== */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--gray-dark);
+  text-decoration: none;
+  color: var(--green);
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.contact-link:hover {
+  border-color: var(--green);
+  background: rgba(0, 255, 65, 0.03);
+  text-shadow: 0 0 10px var(--green-glow);
+}
+.contact-link .cmd { color: var(--green-dim); }
+.contact-link .platform {
+  color: var(--gray-mid);
+  margin-left: auto;
+  font-size: 11px;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--gray-mid);
+}
+.footer .exit-cmd { color: var(--green-dim); }
+
+/* ========== SIDE NAV (anchors) ========== */
+.side-nav {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--gray-dark);
+  transition: color 0.2s;
+  position: relative;
+}
+.side-nav a:hover { color: var(--green); }
+.side-nav a.active { color: var(--green); }
+
+.side-nav .dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.3s;
+  position: relative;
+}
+.side-nav a.active .dot {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-glow);
+}
+.side-nav a.active .dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: dot-ping 2s ease-out infinite;
+}
+@keyframes dot-ping {
+  0% { transform: scale(1); opacity: 0.3; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.side-nav .label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.side-nav a:hover .label,
+.side-nav a.active .label { opacity: 1; transform: translateX(0); }
+
+.side-nav a.hello { color: var(--green); }
+.side-nav a.hello .dot {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-glow);
+}
+.side-nav a.hello .label {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green-glow);
+  font-size: 11px;
+  letter-spacing: 2px;
+  transition: opacity 0.3s;
+  overflow: hidden;
+  display: inline-block;
+  white-space: nowrap;
+  width: 0;
+  animation: hello-type 1.2s steps(12) 0.5s forwards;
+  border-right: 2px solid var(--green);
+  letter-spacing: 0;
+}
+.side-nav a.hello .label.typed {
+  border-right-color: var(--green);
+  animation: cursor-blink-border 1s step-end infinite;
+  width: 12ch;
+}
+@keyframes hello-type {
+  0% { width: 0; }
+  100% { width: 12ch; }
+}
+@keyframes cursor-blink-border {
+  0%, 100% { border-right-color: var(--green); }
+  50% { border-right-color: transparent; }
+}
+.side-nav a.hello.faded .label {
+  opacity: 0;
+  width: 0;
+  border-right-color: transparent;
+  animation: none;
+}
+.side-nav a.hello.faded .dot {
+  background: transparent;
+  box-shadow: none;
+}
+.side-nav a.hello.faded { color: var(--gray-dark); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .side-nav { display: none; }
+  body { font-size: 13px; }
+  .hero-heading { font-size: 22px; }
+  .section-heading { font-size: 18px; }
+  .gallery-images { grid-template-columns: 1fr; }
+  .gallery-meta { display: none; }
+  .hero-links { flex-direction: column; gap: 12px; }
+  .nav-links a { padding: 4px 6px; font-size: 11px; }
+  .arch-card pre, .project-ascii pre { font-size: 10px; }
+  .lang-switch { top: 8px; right: 8px; }
+  .contact-link { font-size: 12px; }
+  .container { padding: 0 16px; }
+  section { padding: 60px 0; }
+  .gallery-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+
+@media (max-width: 480px) {
+  .hero-heading { font-size: 18px; }
+  .section-heading { font-size: 16px; }
+  .nav-prompt { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+
+<div class="lang-switch">
+  <button id="lang-en" onclick="setLang('en')">EN</button>
+  <button id="lang-ua" onclick="setLang('ua')">UA</button>
+</div>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-prompt"><span>$</span> <span data-en="portfolio" data-ua="портфоліо">portfolio</span> ~</div>
+    <div class="nav-links">
+      <a href="#projects" data-en="Projects" data-ua="Проекти">Projects</a>
+      <a href="#architecture" data-en="Architecture" data-ua="Архітектура">Architecture</a>
+      <a href="#designs" data-en="Designs" data-ua="Дизайн">Designs</a>
+      <a href="#contact" data-en="Contact" data-ua="Контакти">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="side-nav" id="sideNav">
+  <a class="hello" href="#"><span class="dot"></span><span class="label">Hello World!</span></a>
+  <a href="#stack" data-section="stack"><span class="dot"></span><span class="label" data-en="Stack" data-ua="Стек">Stack</span></a>
+  <a href="#projects" data-section="projects"><span class="dot"></span><span class="label" data-en="Projects" data-ua="Проекти">Projects</span></a>
+  <a href="#architecture" data-section="architecture"><span class="dot"></span><span class="label" data-en="Architecture" data-ua="Архітектура">Architecture</span></a>
+  <a href="#designs" data-section="designs"><span class="dot"></span><span class="label" data-en="Designs" data-ua="Дизайн">Designs</span></a>
+  <a href="#contact" data-section="contact"><span class="dot"></span><span class="label" data-en="Contact" data-ua="Контакти">Contact</span></a>
+</div>
+
+<div class="container">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-prompt"><span class="p">$</span> whoami</div>
+    <div class="hero-whoami"><span class="gt">&gt;</span> <span class="name">olexander_k</span> - full-stack developer</div>
+
+    <div class="hero-badge" data-en="[PORTFOLIO]" data-ua="[ПОРТФОЛІО]">[PORTFOLIO]</div>
+
+    <h1 class="hero-heading" id="hero-heading"
+      data-en="You need it built. I've already done it."
+      data-ua="Вам потрібно зробити. Я вже таке робив.">
+    </h1>
+
+    <p class="hero-text"
+      data-en="SaaS with payments. DeFi bots in Rust. Tournament platform with crypto. Telegram bots. REST APIs. Landing pages. Here's what I've shipped, source code included."
+      data-ua="SaaS з оплатами. DeFi боти на Rust. Турнірна платформа з крипто. Telegram боти. REST API. Лендінги. Ось що я зробив, з вихідним кодом.">
+    </p>
+
+    <div class="hero-links">
+      <a href="#projects">
+        <span class="cmd">$</span>
+        <span data-en="cd ./projects" data-ua="cd ./проекти">cd ./projects</span>
+        <span class="arrow">&darr;</span>
+      </a>
+      <a href="https://github.com/WabiSabikk" target="_blank" rel="noopener">
+        <span class="cmd">$</span> open github
+        <span class="arrow">&nearr;</span>
+      </a>
+    </div>
+
+    <div class="scroll-hint" id="scrollHint" onclick="document.getElementById('stack').scrollIntoView({behavior:'smooth'})">
+      <span class="scroll-hint-text" data-en="scroll" data-ua="гортай">scroll</span>
+      <div class="scroll-hint-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== TECH STACK ===== -->
+  <section id="stack">
+    <div class="reveal">
+      <div class="cmd-label"><span class="prompt">$</span> <span data-en="cat stack.conf" data-ua="cat стек.conf">cat stack.conf</span></div>
+      <h2 class="section-heading" data-en="Stack that ships" data-ua="Стек, який працює">Stack that ships</h2>
+    </div>
+
+    <div class="stack-table reveal">
+      <div class="stack-header">
+        <span data-en="INSTALLED PACKAGES" data-ua="ВСТАНОВЛЕНІ ПАКЕТИ">INSTALLED PACKAGES</span>
+        <span>STATUS</span>
+      </div>
+      <div class="stack-divider">────────────────────────────────────────────</div>
+      <div class="stack-row primary"><span class="stack-name">C# / .NET 9</span><span class="stack-status">[PRIMARY]</span></div>
+      <div class="stack-row primary"><span class="stack-name">Rust</span><span class="stack-status">[PRIMARY]</span></div>
+      <div class="stack-row primary"><span class="stack-name">Python</span><span class="stack-status">[PRIMARY]</span></div>
+      <div class="stack-row primary"><span class="stack-name">TypeScript</span><span class="stack-status">[PRIMARY]</span></div>
+      <div class="stack-row"><span class="stack-name">Solidity / Foundry</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Blazor SSR</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">React / Next.js</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">ASP.NET Core</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">FastAPI</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Entity Framework</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">PostgreSQL</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Supabase</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">SignalR</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Docker</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Stripe API</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Telegram Bot API</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">Node.js</span><span class="stack-status">[installed]</span></div>
+      <div class="stack-row"><span class="stack-name">REST API Design</span><span class="stack-status">[installed]</span></div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects">
+    <div class="reveal">
+      <div class="cmd-label"><span class="prompt">$</span> <span data-en="ls -la ./projects/" data-ua="ls -la ./проекти/">ls -la ./projects/</span></div>
+      <h2 class="section-heading" data-en="What I've shipped" data-ua="Що я зробив">What I've shipped</h2>
+      <p class="section-desc"
+        data-en="These aren't tutorials or homework. Each one solves a real problem, has real users, and the code is on GitHub."
+        data-ua="Це не туторіали і не домашки. Кожен проект вирішує реальну задачу, має користувачів, а код на GitHub.">
+      </p>
+    </div>
+
+    <!-- CreatorHub -->
+    <div class="project-card reveal">
+      <div class="project-titlebar">
+        <div class="project-dots"><span></span><span></span><span></span></div>
+        <span class="project-title">creatorhub - preview</span>
+      </div>
+      <div class="project-body">
+        <div class="project-cmd"><span class="prompt">$</span> cat ./projects/creatorhub/README.md</div>
+        <div class="project-tagline" data-en="Content Creators Platform" data-ua="Платформа для контент-креаторів">Content Creators Platform</div>
+        <p class="project-desc"
+          data-en="A place where video editors, designers and scriptwriters find each other and get hired. 9 categories, reviews, portfolios, follow system, moderation queue. The backend is 8 projects in one .NET solution: domain layer knows nothing about the database, infrastructure implements the contracts, Blazor SSR handles the UI with Fluxor state. 26K lines total, FluentValidation on every endpoint, AutoMapper for all DTOs."
+          data-ua="Місце де відеомонтажери, дизайнери та сценаристи знаходять одне одного і отримують замовлення. 9 категорій, відгуки, портфоліо, підписки, черга модерації. Бекенд це 8 проектів в одному .NET solution: домен нічого не знає про базу, інфраструктура реалізує контракти, Blazor SSR з Fluxor стейтом рендерить UI. 26K рядків, FluentValidation на кожному endpoint, AutoMapper для всіх DTO.">
+        </p>
+        <div class="project-tags">
+          <span>.NET 9</span><span>Blazor SSR</span><span>EF Core</span><span>Clean Architecture</span><span>ASP.NET Identity</span><span>FluentValidation</span>
+        </div>
+        <a class="project-link" href="https://github.com/WabiSabikk/CreatorHub" target="_blank" rel="noopener">
+          <span class="cmd">$</span> open github/CreatorHub &nearr;
+        </a>
+        <div class="project-screenshot">
+          <div class="ss-bar">
+            <div class="ss-dots"><span></span><span></span><span></span></div>
+            <span class="ss-title">creatorhub - preview</span>
+          </div>
+          <img src="creatorhub.png" alt="CreatorHub screenshot" loading="lazy" data-lightbox="creatorhub.png" data-lightbox-title="creatorhub.png">
+        </div>
+      </div>
+    </div>
+
+    <!-- GGHub -->
+    <div class="project-card reveal">
+      <div class="project-titlebar">
+        <div class="project-dots"><span></span><span></span><span></span></div>
+        <span class="project-title">gghub - architecture</span>
+      </div>
+      <div class="project-body">
+        <div class="project-cmd"><span class="prompt">$</span> cat ./projects/gghub/README.md</div>
+        <div class="project-tagline" data-en="CS2 Tournament Platform" data-ua="Турнірна платформа CS2">CS2 Tournament Platform</div>
+        <p class="project-desc"
+          data-en="Two players type /duel in Telegram, pick a format, pay the entry fee through Cryptomus. The API calls DatHost, spins up a CS2 server, sends the IP back via SignalR. When the match ends, DatHost fires a webhook, the system reads the scoreboard, credits the winner's balance. Forfeit logic checks actual ping from server console logs. 9 projects, 7 controllers, 2 SignalR hubs, full tournament bracket generation."
+          data-ua="Два гравці пишуть /duel в Telegram, обирають формат, платять внесок через Cryptomus. API звертається до DatHost, піднімає CS2 сервер, відправляє IP назад через SignalR. Коли матч завершується, DatHost шле webhook, система читає таблицю рахунку, зараховує виграш на баланс. Логіка форфейту перевіряє реальний пінг з консолі сервера. 9 проектів, 7 контролерів, 2 SignalR хаби, генерація турнірної сітки.">
+        </p>
+        <div class="project-tags">
+          <span>.NET 9</span><span>Telegram Bot</span><span>SignalR</span><span>DatHost API</span><span>Cryptomus</span><span>Steam OAuth</span><span>Blazor</span>
+        </div>
+        <a class="project-link" href="https://github.com/WabiSabikk/GGHub" target="_blank" rel="noopener">
+          <span class="cmd">$</span> open github/GGHub &nearr;
+        </a>
+        <div class="project-ascii">
+<pre>
+┌───────────┐    ┌──────────────┐   ┌──────────────┐
+│  Player   │──▶ │ Telegram Bot │──▶│  Blazor Web  │
+│Steam OAuth│    │/duel 1v1 bo3 │   │  Tournaments │
+└─────┬─────┘    └──────┬───────┘   └──────┬───────┘
+      │                 │                  │
+      └────────┬────────┘──────────────────┘
+               ▼
+┌──────────────────────────────────────────────────┐
+│           GGHub API - .NET 9                     │
+│  REST + WebSocket • 7 controllers • 2 hubs       │
+└──┬──────────┬──────────────┬────────────────┬────┘
+   ▼          ▼              ▼                ▼
+┌──────┐  ┌────────┐  ┌───────────┐  ┌─────────────┐
+│Steam │  │SQL Srv │  │  DatHost  │  │  Cryptomus  │
+│ API  │  │EF Core │  │CS2 server │  │Crypto payout│
+└──────┘  └────────┘  └───────────┘  └─────────────┘
+</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-Chain Liquidator -->
+    <div class="project-card reveal">
+      <div class="project-titlebar">
+        <div class="project-dots"><span></span><span></span><span></span></div>
+        <span class="project-title">multi-chain-liquidator - architecture</span>
+      </div>
+      <div class="project-body">
+        <div class="project-cmd"><span class="prompt">$</span> cat ./projects/liquidator/README.md</div>
+        <div class="project-tagline" data-en="Multi-Chain DeFi Liquidation Bot" data-ua="Мульти-чейн DeFi бот для ліквідацій">Multi-Chain DeFi Liquidation Bot</div>
+        <p class="project-desc"
+          data-en="One Rust binary watches 18,000+ borrower positions across 3 blockchains and 6 lending protocols at once. When a health factor drops below 1.0, it fires a flash loan liquidation through a custom Solidity contract, swaps collateral on the best DEX route, repays the loan, and keeps the profit. Zero upfront capital needed. Each chain has its own monitor running async on tokio, scanning via Multicall3 batches (602 borrowers in 276ms on HyperLend). The dashboard shows at-risk positions in real time, competitor liquidations, wallet balances per chain, and an event log. 46 Rust files, 44 Solidity contracts, deployed on Mantle, Ink (OP Stack), and HyperEVM."
+          data-ua="Один Rust бінарник моніторить 18,000+ позицій позичальників на 3 блокчейнах і 6 lending протоколах одночасно. Коли health factor падає нижче 1.0, бот стріляє flash loan ліквідацію через кастомний Solidity контракт, свапає заставу через найкращий DEX маршрут, повертає позику і залишає прибуток. Нуль початкового капіталу. Кожен чейн має свій монітор на async tokio, сканує через Multicall3 батчі (602 позичальники за 276ms на HyperLend). Дашборд показує at-risk позиції в реальному часі, ліквідації конкурентів, баланси гаманців по чейнах і лог подій. 46 Rust файлів, 44 Solidity контракти, задеплоєно на Mantle, Ink (OP Stack) і HyperEVM.">
+        </p>
+        <div class="project-tags">
+          <span>Rust</span><span>Solidity</span><span>Alloy</span><span>Aave V3</span><span>Morpho Blue</span><span>Flash Loans</span><span>Foundry</span><span>tokio</span>
+        </div>
+        <a class="project-link" href="https://github.com/WabiSabikk/multi-chain-liquidator" target="_blank" rel="noopener">
+          <span class="cmd">$</span> open github/multi-chain-liquidator &nearr;
+        </a>
+        <div class="project-screenshot">
+          <div class="ss-bar">
+            <div class="ss-dots"><span></span><span></span><span></span></div>
+            <span class="ss-title">liquidator-dashboard - live</span>
+          </div>
+          <img src="liquidator-dashboard.png" alt="Multi-Chain Liquidator Dashboard" loading="lazy" data-lightbox="liquidator-dashboard.png" data-lightbox-title="liquidator-dashboard.png">
+        </div>
+      </div>
+    </div>
+
+    <!-- SafeCheck -->
+    <div class="project-card reveal">
+      <div class="project-titlebar">
+        <div class="project-dots"><span></span><span></span><span></span></div>
+        <span class="project-title">safecheck - preview</span>
+      </div>
+      <div class="project-body">
+        <div class="project-cmd"><span class="prompt">$</span> cat ./projects/safecheck/README.md</div>
+        <div class="project-tagline" data-en="Food Safety Compliance SaaS" data-ua="SaaS для контролю безпеки харчування">Food Safety Compliance SaaS</div>
+        <p class="project-desc"
+          data-en="Every morning the app generates checklists from templates (system + custom). Staff logs temperatures, and if a reading is out of range the system fires an email to every manager within seconds. Overdue checklists trigger reminders at 2pm. Mondays send a weekly digest with compliance percentages. Kitchen staff logs in with a 4-digit PIN, owners get Stripe billing and a full admin panel. Works offline too, syncs when back online through IndexedDB queue + service worker."
+          data-ua="Кожного ранку додаток генерує чек-листи з шаблонів (системних + кастомних). Персонал фіксує температури, і якщо показник за межами норми, система відправляє email кожному менеджеру за секунди. Прострочені чек-листи тригерять нагадування о 14:00. В понеділок приходить дайджест з відсотками відповідності. Кухонний персонал заходить по 4-значному PIN, власники отримують Stripe billing і повну адмінку. Працює офлайн, синхронізується через IndexedDB чергу + service worker.">
+        </p>
+        <div class="project-tags">
+          <span>Next.js</span><span>TypeScript</span><span>Supabase</span><span>Stripe</span><span>Resend</span><span>Vercel</span>
+        </div>
+        <a class="project-link" href="https://github.com/WabiSabikk/safecheck" target="_blank" rel="noopener">
+          <span class="cmd">$</span> open github/safecheck &nearr;
+        </a>
+        <div class="project-screenshot">
+          <div class="ss-bar">
+            <div class="ss-dots"><span></span><span></span><span></span></div>
+            <span class="ss-title">safecheck - preview</span>
+          </div>
+          <img src="safecheck.png" alt="SafeCheck screenshot" loading="lazy" data-lightbox="safecheck.png" data-lightbox-title="safecheck.png">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ARCHITECTURE ===== -->
+  <section id="architecture">
+    <div class="reveal">
+      <div class="cmd-label"><span class="prompt">$</span> <span data-en="cat architecture.log" data-ua="cat архітектура.log">cat architecture.log</span></div>
+      <h2 class="section-heading" data-en="How it's built inside" data-ua="Як це побудовано всередині">How it's built inside</h2>
+      <p class="section-desc"
+        data-en="Click through the GitHub repos. You'll see the same patterns: layers, contracts, tests. Code you can read without a walkthrough."
+        data-ua="Відкрийте GitHub. Побачите ті ж патерни: шари, контракти, тести. Код, який можна читати без пояснень.">
+      </p>
+    </div>
+
+    <!-- CreatorHub Architecture -->
+    <div class="arch-card reveal">
+      <div class="arch-bar">
+        <div class="arch-dots"><span></span><span></span><span></span></div>
+        <span class="arch-title" data-en="creatorhub - Clean Architecture (8 projects)" data-ua="creatorhub - Clean Architecture (8 проектів)">creatorhub - Clean Architecture (8 projects)</span>
+      </div>
+<pre>
+  LAYER 0: PRESENTATION
+  ├── Blazor SSR (11 endpoints, Fluxor)
+  ├── Blazor Client (WASM, i18n)
+  └── Tests (xUnit, InMemory DB)
+          │
+  LAYER 1: APPLICATION
+  ├── Application (12 services, validators, AutoMapper)
+  ├── Common (20+ DTOs)
+  └── Contracts (Enums, Constants)
+          │
+  LAYER 2: DOMAIN
+  └── CreatorHubDB (User, Topic, Post, Comment, Category, Badge, Review...)
+          │
+  LAYER 3: INFRASTRUCTURE
+  ├── Infrastructure (EF Core, 13 repos, soft-delete)
+  └── SQLite / SQL Server
+</pre>
+      <div class="arch-note"><span data-en="DEPENDENCY RULE: Presentation → Application → Domain ← Infrastructure" data-ua="ПРАВИЛО ЗАЛЕЖНОСТЕЙ: Presentation → Application → Domain ← Infrastructure">DEPENDENCY RULE: Presentation → Application → Domain ← Infrastructure</span></div>
+    </div>
+
+    <!-- GGHub Architecture -->
+    <div class="arch-card reveal">
+      <div class="arch-bar">
+        <div class="arch-dots"><span></span><span></span><span></span></div>
+        <span class="arch-title" data-en="gghub - Match Lifecycle (9 projects, 7 controllers, 2 hubs)" data-ua="gghub - Життєвий цикл матчу (9 проектів, 7 контролерів, 2 хаби)">gghub - Match Lifecycle (9 projects, 7 controllers, 2 hubs)</span>
+      </div>
+<pre>
+  /duel command received
+      │
+      ▼
+  ┌─────────────────────────────────┐
+  │  MATCHMAKING                    │
+  │  Validate players → Check       │
+  │  balance → Create lobby         │
+  └──────────────┬──────────────────┘
+                 ▼
+  ┌─────────────────────────────────┐
+  │  PAYMENT                        │
+  │  Cryptomus invoice → Webhook    │
+  │  confirmation → Lock funds      │
+  └──────────────┬──────────────────┘
+                 ▼
+  ┌─────────────────────────────────┐
+  │  SERVER                         │
+  │  DatHost.Create() → Boot CS2    │
+  │  → Send IP via SignalR          │
+  └──────────────┬──────────────────┘
+                 ▼
+  ┌─────────────────────────────────┐
+  │  MATCH                          │
+  │  Players connect → Game runs    │
+  │  → DatHost webhook on end       │
+  └──────────────┬──────────────────┘
+                 ▼
+  ┌─────────────────────────────────┐
+  │  SETTLEMENT                     │
+  │  Parse scoreboard → Credit      │
+  │  winner → Update ELO → Notify   │
+  └─────────────────────────────────┘
+</pre>
+    </div>
+
+    <!-- Multi-Chain Liquidator Architecture -->
+    <div class="arch-card reveal">
+      <div class="arch-bar">
+        <div class="arch-dots"><span></span><span></span><span></span></div>
+        <span class="arch-title" data-en="liquidator - Multi-Chain Architecture (46 Rust + 44 Solidity)" data-ua="liquidator - Мульти-чейн архітектура (46 Rust + 44 Solidity)">liquidator - Multi-Chain Architecture (46 Rust + 44 Solidity)</span>
+      </div>
+<pre>
+  main.rs (tokio async runtime)
+      │
+      ├──────────────┬──────────────┐
+      ▼              ▼              ▼
+  ┌────────┐   ┌──────────┐   ┌──────────┐
+  │ Mantle │   │   Ink    │   │ HyperEVM │
+  │ 5000   │   │  57073   │   │   999    │
+  └───┬────┘   └────┬─────┘   └────┬─────┘
+      │              │              │
+      ▼              ▼              ▼
+  PROTOCOLS (per chain):
+  ├── Aave V3 monitor  → Multicall3 batch scan
+  ├── Morpho monitor   → RPC position scan
+  └── Lendle monitor   → Aave V2 fork
+      │
+      ▼
+  EXECUTOR:
+  ├── FlashLoanLiquidator.sol → borrow + liquidate + swap
+  ├── DEX router (Velodrome, FusionX, HyperSwap, Odos)
+  └── Telegram alerts on every event
+      │
+      ▼
+  DASHBOARD (SSR):
+  ├── 6 live monitors with scan latency
+  ├── At-risk positions table (HF, collateral, drop %)
+  ├── Competitor liquidation tracking
+  └── Wallet balances per chain
+</pre>
+    </div>
+
+    <!-- SafeCheck Architecture -->
+    <div class="arch-card reveal">
+      <div class="arch-bar">
+        <div class="arch-dots"><span></span><span></span><span></span></div>
+        <span class="arch-title" data-en="safecheck - SaaS Architecture (Next.js 16, dual auth, offline-first)" data-ua="safecheck - SaaS Архітектура (Next.js 16, подвійна автентифікація, offline-first)">safecheck - SaaS Architecture (Next.js 16, dual auth, offline-first)</span>
+      </div>
+<pre>
+  ┌──────────────────────────────────────────────────────┐
+  │                     NEXT.JS APP                      │
+  │                                                      │
+  │  ┌────────────┐  ┌───────────┐   ┌─────────────────┐ │
+  │  │ Owner Auth │  │ Staff PIN │   │ Service Worker  │ │
+  │  │ (Supabase) │  │ (4-digit) │   │ (offline sync)  │ │
+  │  └─────┬──────┘  └─────┬─────┘   └────────┬────────┘ │
+  │        └───────┬───────┘                  │          │
+  │                ▼                          │          │
+  │  ┌──────────────────────────────┐         │          │
+  │  │   API Routes (Server)        │◀────────┘          │
+  │  │   /checklist  /temperature   │  IndexedDB queue   │
+  │  │   /alerts     /billing       │                    │
+  │  └──────┬───────────┬───────────┘                    │
+  └─────────┼───────────┼────────────────────────────────┘
+            ▼           ▼
+  ┌──────────┐  ┌───────────┐  ┌────────┐  ┌─────────┐
+  │ Supabase │  │  Stripe   │  │ Resend │  │ Vercel  │
+  │ Postgres │  │  Billing  │  │ Alerts │  │  Edge   │
+  │ Auth+RLS │  │ Webhooks  │  │ Digest │  │  CDN    │
+  └──────────┘  └───────────┘  └────────┘  └─────────┘
+</pre>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section id="designs">
+    <div class="reveal">
+      <div class="cmd-label"><span class="prompt">$</span> <span data-en="ls -la ./designs/" data-ua="ls -la ./дизайни/">ls -la ./designs/</span></div>
+      <h2 class="section-heading" data-en="One brief, four directions" data-ua="Один бриф, чотири напрямки">One brief, four directions</h2>
+      <p class="section-desc"
+        data-en="Client said &quot;landing page for a marketing agency.&quot; I made four visual concepts. Same content, totally different mood each time. Pure HTML+CSS, no frameworks."
+        data-ua="Клієнт сказав &quot;лендінг для маркетингового агентства.&quot; Я зробив чотири візуальні концепти. Той самий контент, зовсім інший настрій кожного разу. Чистий HTML+CSS, без фреймворків.">
+      </p>
+    </div>
+
+    <div class="gallery-images reveal">
+      <div class="gallery-frame" data-lightbox="landing-neon-red.png" data-lightbox-title="landing-neon-red.png">
+        <div class="gf-bar">
+          <div class="gf-dots"><span></span><span></span><span></span></div>
+          <span class="gf-title">landing-neon-red.png</span>
+        </div>
+        <img src="landing-neon-red.png" alt="Neon Red landing page concept" loading="lazy">
+      </div>
+      <div class="gallery-frame" data-lightbox="landing-mocha-mousse.png" data-lightbox-title="landing-mocha-mousse.png">
+        <div class="gf-bar">
+          <div class="gf-dots"><span></span><span></span><span></span></div>
+          <span class="gf-title">landing-mocha-mousse.png</span>
+        </div>
+        <img src="landing-mocha-mousse.png" alt="Mocha Mousse landing page concept" loading="lazy">
+      </div>
+      <div class="gallery-frame" data-lightbox="landing-jewel-tones.png" data-lightbox-title="landing-jewel-tones.png">
+        <div class="gf-bar">
+          <div class="gf-dots"><span></span><span></span><span></span></div>
+          <span class="gf-title">landing-jewel-tones.png</span>
+        </div>
+        <img src="landing-jewel-tones.png" alt="Jewel Tones landing page concept" loading="lazy">
+      </div>
+      <div class="gallery-frame" data-lightbox="landing-adsestet.png" data-lightbox-title="landing-adsestet.png">
+        <div class="gf-bar">
+          <div class="gf-dots"><span></span><span></span><span></span></div>
+          <span class="gf-title">landing-adsestet.png</span>
+        </div>
+        <img src="landing-adsestet.png" alt="Adsestet landing page concept" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="reveal">
+      <div class="cmd-label"><span class="prompt">$</span> <span data-en="cat contact.txt" data-ua="cat контакти.txt">cat contact.txt</span></div>
+      <h2 class="section-heading" data-en="Let's talk about your project" data-ua="Давайте поговоримо про ваш проект">Let's talk about your project</h2>
+      <p class="section-desc"
+        data-en="I respond within a couple of hours. Describe what you need, I'll tell you what it takes and how I'd build it."
+        data-ua="Відповідаю протягом пари годин. Опишіть що потрібно, скажу що для цього треба і як я б це зробив.">
+      </p>
+    </div>
+
+    <div class="contact-links reveal">
+      <a class="contact-link" href="https://github.com/WabiSabikk" target="_blank" rel="noopener">
+        <span class="cmd">$</span> open github.com/WabiSabikk
+        <span class="platform">[GitHub]</span>
+      </a>
+      <a class="contact-link" href="https://freelancehunt.com/freelancer/greentealzt.html" target="_blank" rel="noopener">
+        <span class="cmd">$</span> open freelancehunt.com/greentealzt
+        <span class="platform">[Freelancehunt]</span>
+      </a>
+      <a class="contact-link" href="https://t.me/wabi_sabik" target="_blank" rel="noopener">
+        <span class="cmd">$</span> open t.me/wabi_sabik
+        <span class="platform">[Telegram]</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <span class="exit-cmd">$ exit</span><br>
+  <span data-en="&copy; 2026 // process terminated." data-ua="&copy; 2026 // процес завершено.">&copy; 2026 // process terminated.</span>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner" id="lightbox-inner">
+    <div class="lightbox-bar">
+      <div class="lb-dots"><span></span><span></span><span></span></div>
+      <span class="lb-title" id="lightbox-title"></span>
+      <span class="lb-close" id="lightbox-close">[x] close</span>
+    </div>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============ LANGUAGE SWITCHER ============
+  var currentLang = 'en';
+
+  function detectLang() {
+    var stored = localStorage.getItem('portfolio-lang');
+    if (stored) return stored;
+    var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+    if (nav.startsWith('uk') || nav.startsWith('ru') || nav.startsWith('be')) return 'ua';
+    return 'en';
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('portfolio-lang', lang);
+    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+    document.getElementById('lang-ua').classList.toggle('active', lang === 'ua');
+    document.documentElement.lang = lang === 'ua' ? 'uk' : 'en';
+
+    var elements = document.querySelectorAll('[data-en]');
+    for (var i = 0; i < elements.length; i++) {
+      var el = elements[i];
+      var text = el.getAttribute('data-' + lang);
+      if (text !== null) {
+        el.textContent = text;
+      }
+    }
+
+    // Re-run typewriter for hero heading
+    typewriterReset();
+  }
+
+  window.setLang = setLang;
+
+  // ============ TYPEWRITER ============
+  var twTimeout = null;
+  var heroEl = null;
+  var cursorSpan = null;
+
+  function typewriterReset() {
+    if (!heroEl) heroEl = document.getElementById('hero-heading');
+    if (!heroEl) return;
+    if (twTimeout) clearTimeout(twTimeout);
+
+    // Create cursor element once
+    if (!cursorSpan) {
+      cursorSpan = document.createElement('span');
+      cursorSpan.className = 'cursor-blink';
+      cursorSpan.textContent = '\u2588';
+    }
+
+    var text = heroEl.getAttribute('data-' + currentLang) || '';
+    // Clear children
+    while (heroEl.firstChild) heroEl.removeChild(heroEl.firstChild);
+
+    var textNode = document.createTextNode('');
+    heroEl.appendChild(textNode);
+    heroEl.appendChild(cursorSpan);
+
+    typewriterAnimate(textNode, text, 0);
+  }
+
+  function typewriterAnimate(textNode, text, i) {
+    if (i <= text.length) {
+      textNode.nodeValue = text.substring(0, i);
+      twTimeout = setTimeout(function() { typewriterAnimate(textNode, text, i + 1); }, 45);
+    }
+  }
+
+  // ============ SCROLL PROGRESS ============
+  var progressBar = null;
+
+  function updateProgress() {
+    if (!progressBar) progressBar = document.getElementById('scroll-progress');
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+
+  // ============ NAV SHOW/HIDE ============
+  var nav = null;
+
+  var scrollHint = null;
+
+  var sideNav = null;
+  var sideLinks = null;
+  var sectionIds = ['stack', 'projects', 'architecture', 'designs', 'contact'];
+
+  function updateNav() {
+    if (!nav) nav = document.getElementById('nav');
+    if (!scrollHint) scrollHint = document.getElementById('scrollHint');
+    if (!sideNav) sideNav = document.getElementById('sideNav');
+    if (!sideLinks) sideLinks = sideNav ? sideNav.querySelectorAll('a') : [];
+
+    if (window.scrollY > 300) {
+      nav.classList.add('visible');
+      if (scrollHint) scrollHint.classList.add('hidden');
+    } else {
+      nav.classList.remove('visible');
+      if (scrollHint) scrollHint.classList.remove('hidden');
+    }
+
+    // active section tracking
+    var current = '';
+    for (var i = 0; i < sectionIds.length; i++) {
+      var el = document.getElementById(sectionIds[i]);
+      if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) {
+        current = sectionIds[i];
+      }
+    }
+    for (var j = 0; j < sideLinks.length; j++) {
+      sideLinks[j].classList.toggle('active', sideLinks[j].getAttribute('data-section') === current);
+    }
+
+    // hello world label: visible only on hero
+    var helloLink = sideNav ? sideNav.querySelector('.hello') : null;
+    if (helloLink) {
+      var shouldFade = current !== '';
+      helloLink.classList.toggle('faded', shouldFade);
+    }
+  }
+
+  // ============ SCROLL REVEAL ============
+  function setupReveal() {
+    var reveals = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          entries[i].target.classList.add('visible');
+          observer.unobserve(entries[i].target);
+        }
+      }
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    for (var i = 0; i < reveals.length; i++) {
+      observer.observe(reveals[i]);
+    }
+  }
+
+  // ============ LIGHTBOX ============
+  var lightbox = null;
+  var lightboxImg = null;
+  var lightboxTitle = null;
+
+  function openLightbox(src, title) {
+    if (!lightbox) lightbox = document.getElementById('lightbox');
+    if (!lightboxImg) lightboxImg = document.getElementById('lightbox-img');
+    if (!lightboxTitle) lightboxTitle = document.getElementById('lightbox-title');
+
+    lightboxImg.src = src;
+    lightboxTitle.textContent = title || '';
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox) lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Lightbox event delegation
+  document.addEventListener('click', function(e) {
+    // Close lightbox when clicking overlay (not inner)
+    if (e.target === lightbox || e.target.id === 'lightbox') {
+      closeLightbox();
+      return;
+    }
+
+    // Close button
+    if (e.target.id === 'lightbox-close') {
+      closeLightbox();
+      return;
+    }
+
+    // Open lightbox from any element with data-lightbox
+    var trigger = e.target.closest('[data-lightbox]');
+    if (trigger) {
+      openLightbox(trigger.getAttribute('data-lightbox'), trigger.getAttribute('data-lightbox-title') || '');
+      return;
+    }
+  });
+
+  // Prevent clicks inside lightbox-inner from closing
+  document.addEventListener('click', function(e) {
+    var inner = document.getElementById('lightbox-inner');
+    if (inner && inner.contains(e.target) && e.target.id !== 'lightbox-close') {
+      // Don't close
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ============ SCROLL EVENTS ============
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        updateProgress();
+        updateNav();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // ============ INIT ============
+  document.addEventListener('DOMContentLoaded', function() {
+    setLang(detectLang());
+    setupReveal();
+    updateProgress();
+    updateNav();
+
+    // After hello typewriter finishes, switch to blinking cursor
+    var helloLabel = document.querySelector('.side-nav .hello .label');
+    if (helloLabel) {
+      helloLabel.addEventListener('animationend', function() {
+        helloLabel.classList.add('typed');
+      });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
